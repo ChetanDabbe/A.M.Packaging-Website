@@ -1,0 +1,108 @@
+.frame7_container{
+    margin-top:4rem;
+    width:100vw;
+    background-color: #5d3bac;
+    color:white;
+    /* padding-left:10rem;; */
+}
+
+.frame7_title{
+    text-align: center;
+}
+
+.contact_cont{
+    display:flex;
+    flex-direction: column;
+}
+
+.cont1 p,.cont2 p{
+    line-height:0.004;
+    color:white;
+    text-align: left;
+}
+
+.divide_cont {
+    display: flex;
+    flex-direction: row;
+    justify-content: center; 
+    align-items: center; 
+    width: 100%; 
+    gap:8rem;
+}
+
+.mail_send {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 3rem;
+    max-width: 40rem;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mail_send h2 {
+    font-family: 'Arial', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #5d3bac;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.mail_send input {
+    width: 100%;
+    max-width: 30vw;
+    height: 3rem;
+    margin-bottom: 1.5rem;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.mail_send input:focus {
+    border-color: #7042de;
+    box-shadow: 0 0 5px rgba(112, 66, 222, 0.5);
+}
+
+.mail_send input[type="text"] {
+    height: 5rem;
+    text-align: start;
+    padding-top: 0.5rem;
+}
+
+.mail_send input[type="text"]::placeholder {
+    color: #b5a0d5;
+    font-size: 1rem;
+}
+
+.mail_send button {
+    width: 100%;
+    max-width: 30vw;
+    height: 3rem;
+    color: #5d3bac;
+    background-color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    border: none;
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.mail_send button:hover {
+    background-color: rgb(229, 215, 215);
+}
+
+.mail_send button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(112, 66, 222, 0.5);
+}
+

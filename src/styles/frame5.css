@@ -1,0 +1,23 @@
+.frame5_container{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap:4rem;
+}
+
+.frame5_photo{
+    width:40vw;
+    height:20rem;
+    border:2px solid black;
+    margin-top:1.2rem;
+
+}
+
+.frame5_about{
+    
+    width:40vw;
+}
+
+.frame5_about p{
+    text-align: justify;
+}

@@ -1,0 +1,91 @@
+.product-card {
+    width: 250px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: white;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease;
+    margin: 1rem;
+}
+
+.badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #7f24f7;
+    color: white;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.image-placeholder {
+    background-color: #f0f0f0;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+}
+
+.product-details {
+    padding: 1rem;
+}
+
+.product-details h3 {
+    font-size: 1.2rem;
+    color: #7f24f7;
+    margin-bottom: 0.5rem;
+}
+
+.product-details p {
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 1rem;
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.features-list li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.3rem;
+}
+
+.feature-icon {
+    color: #7f24f7;
+    margin-right: 0.5rem;
+}
+
+.learn-more-btn {
+    width: 90%;
+    padding: 0.5rem 0;
+    background-color: #7f24f7;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.learn-more-btn:hover {
+    background-color: #5c1ab5;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}

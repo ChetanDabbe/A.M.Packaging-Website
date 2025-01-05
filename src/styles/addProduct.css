@@ -1,0 +1,118 @@
+.admin_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.25rem;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+  }
+  
+  .admin_cont1 {
+    width: 100%;
+    max-width: 31.25rem;
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.1);
+    padding: 1.25rem 1.875rem;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  .admin_cont1 h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 1.25rem;
+  }
+  
+  .admin_heading_label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .admin_input {
+    width: 100%;
+    padding: 0.625rem;
+    font-size: 0.875rem;
+    border: 0.0625rem solid #ccc;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+  }
+  
+  .admin_input:focus {
+    border-color: #7b5fe5;
+    outline: none;
+    box-shadow: 0 0 0.1875rem rgba(123, 95, 229, 0.5);
+  }
+  
+  .feature-field {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 0.625rem;
+  }
+  
+  .feature-input {
+    flex: 1;
+  }
+  
+  .add-feature-btn {
+    background-color: #7b5fe5;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+  
+  .add-feature-btn:hover {
+    background-color: #6a4ed4;
+  }
+  
+  .remove-feature-btn {
+    background-color: #db4c4c;
+    color: #fff;
+    border: none;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.875rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2rem;
+    width: 2rem;
+    margin-top:-1rem;
+  }
+  
+  .remove-feature-btn:hover {
+    background-color: #d62c2c;
+  }
+  
+  .save-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #7b5fe5;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .save-btn:hover {
+    background-color: #6a4ed4;
+  }
+  

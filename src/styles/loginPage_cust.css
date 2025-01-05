@@ -1,0 +1,161 @@
+.login_image_container {
+  position: absolute;
+  left: 6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 35%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login_image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  /* box-shadow: 0rem 0.25rem 0.625rem rgba(0, 0, 0, 0.1); */
+}
+
+.customer_login {
+  background: #fff;
+  border-radius: 0.625rem;
+  padding: 2.5rem;
+  box-shadow: 0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1), -0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.1), 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 25rem;
+  position: absolute;
+  right: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
+
+.logo_container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.logo_image {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: #e4e4e4;
+}
+
+.logo_heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #6b3eff;
+  margin: 0;
+  text-align: center;
+}
+
+.login_form {
+  padding: 2rem;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  border-top: 0;
+}
+
+.form_heading {
+  font-size: 1.6rem;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 0.625rem;
+}
+
+.form_subheading {
+  color: #666;
+  margin-bottom: 1.25rem;
+}
+
+.form_label {
+  display: block;
+  font-size: 0.9rem;
+  color: black;
+  font-weight: bold;
+  margin-bottom: 0.3125rem;
+  text-align: left;
+}
+
+.form_input {
+  width: 100%;
+  padding: 0.625rem;
+  margin-bottom: 0.9375rem;
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.3125rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.password_container {
+  position: relative;
+}
+
+.password_toggle {
+  position: absolute;
+  right: 0.7rem;
+  top: 35%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
+}
+
+.form_actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.remember_me {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.forgot_password {
+  font-size: 0.9rem;
+  color: #6b3eff;
+  text-decoration: none;
+}
+
+.forgot_password:hover {
+  text-decoration: underline;
+}
+
+.submit_button {
+  background-color: #6b3eff;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  width: 100%;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.submit_button:hover {
+  background-color: #5a32d3;
+}
+
+.signup_text {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.9375rem;
+}
+
+.signup_link {
+  color: #6b3eff;
+  text-decoration: none;
+  background: none;
+  border:none;
+  cursor: pointer;
+}
+
+.signup_link:hover {
+  text-decoration: underline;
+}
