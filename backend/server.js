@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const multer = require("multer");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 dotenv.config();
 
@@ -30,9 +32,7 @@ const upload = multer({
   storage,
   limits: { fileSize: 500 * 1024 },
   fileFilter: (req, file, cb) => {
-    file.mimetype.startsWith("image/")
-      ? cb(null, true)
-      : cb(new Error("Invalid file type"));
+    file.mimetype.startsWith("image/") ? cb(null, true) : cb(new Error("Invalid file type"));
   },
 });
 
@@ -46,8 +46,133 @@ const ProductSchema = new mongoose.Schema({
 
 const Product = mongoose.model("Product", ProductSchema);
 
+const UserSchema = new mongoose.Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  mobile: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  companyName: { type: String, default: "" },
+  role: { type: String, default: "user" }, 
+});
+
+const User = mongoose.model("User", UserSchema);
+
+const AdminSchema = new mongoose.Schema({
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  role: { type: String, default: "admin" }, 
+});
+
+const Admin = mongoose.model("Admin", AdminSchema);
+
+
+app.post("/register", async (req, res) => {
+  const { firstName, lastName, companyName, email, mobile, password } = req.body;
+
+  if (!firstName || !lastName || !email || !mobile || !password) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "Email already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+      firstName,
+      lastName,
+      companyName,
+      email,
+      mobile,
+      password: hashedPassword,
+      role: "user", 
+    });
+
+    await newUser.save();
+    res.status(201).json({ message: "Account created successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create account" });
+  }
+});
+
+app.post("/login", async (req, res) => {
+  const { email, password, role } = req.body;
+
+  if (!email || !password || !role) {
+    return res.status(400).json({ error: "Email, password, and role are required" });
+  }
+
+  try {
+    let user;
+
+    if (role === "admin") {
+      
+      user = await Admin.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ error: "Admin not found" });
+      }
+    } else {
+      
+      user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ error: "User not found" });
+      }
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ error: "Invalid password" });
+    }
+
+    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 3600000,
+    });
+
+    res.status(200).json({
+      message: "Login successful",
+      role: user.role,
+      token,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 app.post(
   "/add",
+  async (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized, please login" });
+    }
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findById(decoded.userId);
+
+      if (user.role !== "admin") {
+        return res.status(403).json({ error: "Only admin can add products" });
+      }
+
+      next();
+    } catch (err) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+  },
   (req, res, next) => {
     upload.single("productImage")(req, res, (err) => {
       if (err instanceof multer.MulterError || err)
@@ -60,8 +185,7 @@ app.post(
       const { productName, price, capacity, features } = req.body;
       if (!productName || !price || !capacity || !features)
         return res.status(400).json({ error: "Missing fields" });
-      if (isNaN(price))
-        return res.status(400).json({ error: "Price must be a number" });
+      if (isNaN(price)) return res.status(400).json({ error: "Price must be a number" });
       const parsedFeatures = JSON.parse(features);
       if (!Array.isArray(parsedFeatures))
         return res.status(400).json({ error: "Features must be an array" });
@@ -81,17 +205,13 @@ app.post(
   }
 );
 
-app.get("/products", async(req,res)=>{
-  try{
-    const products= await Product.find();
+app.get("/products", async (req, res) => {
+  try {
+    const products = await Product.find();
     res.status(200).json(products);
-
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-  catch(err){
-    res.status(500).json({error:err.message});
-  }
-})
-
-
+});
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

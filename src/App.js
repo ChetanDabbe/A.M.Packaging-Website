@@ -6,6 +6,7 @@ import Contact from './components/ContactPage';
 import AddProduct from './components/AddProduct';
 import LoginPageCust from './components/LoginPageCust';
 import SignUpPage from './components/SignUpPage';
+import AdminPage from './components/AdminPage';
 import './App.css';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
 
           <Route path="/product/login-page/signup" element={<SignUpPage/>}></Route>
 
+          <Route path="/admin" element={<AdminPage/>}></Route>
         </Routes>
       </Router>
       

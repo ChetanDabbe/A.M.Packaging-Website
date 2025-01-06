@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie"; // Import js-cookie to handle cookies
 import "../styles/ProductPage.css";
 import { FaSearch, FaUser, FaShoppingCart } from "react-icons/fa";
 import Navbar from "./Navbar";
@@ -9,6 +10,7 @@ function ProductPage() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [quantities, setQuantities] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const fetchProducts = async () => {
     try {
@@ -28,7 +30,17 @@ function ProductPage() {
 
   useEffect(() => {
     fetchProducts();
+    const token = Cookies.get("jwt"); // Check if the JWT token exists in cookies
+    if (token) {
+      setIsLoggedIn(true);
+    }
   }, []);
+
+  const handleLogout = () => {
+    Cookies.remove("jwt"); // Remove JWT token from cookies
+    setIsLoggedIn(false);
+    navigate("/product/login-page"); // Redirect to login page
+  };
 
   const openLoginInPage = () => {
     navigate("/product/login-page");
@@ -67,9 +79,15 @@ function ProductPage() {
           />
         </div>
         <div className="action-buttons">
-          <button className="icon-button" onClick={openLoginInPage}>
-            <FaUser className="icon" /> Login
-          </button>
+          {isLoggedIn ? (
+            <button className="icon-button" onClick={handleLogout}>
+              <FaUser className="icon" /> Logout
+            </button>
+          ) : (
+            <button className="icon-button" onClick={openLoginInPage}>
+              <FaUser className="icon" /> Login
+            </button>
+          )}
           <button className="icon-button">
             <FaShoppingCart className="icon" /> Cart
           </button>
