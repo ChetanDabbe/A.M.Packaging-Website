@@ -80,7 +80,9 @@ const AdminSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  mobile: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  companyName: { type: String, default: "" },
   role: { type: String, default: "admin" },
 });
 
@@ -118,6 +120,41 @@ app.post("/register", async (req, res) => {
     res.status(500).json({ error: "Failed to create account" });
   }
 });
+
+
+// app.post("/register", async (req, res) => {
+//   const { firstName, lastName, email, mobile, password, companyName } = req.body;
+
+//   if (!firstName || !lastName || !email || !mobile || !password ) {
+//     return res.status(400).json({ error: "All fields are required" });
+//   }
+
+//   try {
+//     const existingAdmin = await Admin.findOne({ email });
+//     if (existingAdmin) {
+//       return res.status(400).json({ error: "Email already exists" });
+//     }
+
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const newAdmin = new Admin({
+//       firstName,
+//       lastName,
+//       email,
+//       mobile,
+//       password: hashedPassword,
+//       companyName: companyName || "",
+//       role: "admin",
+//     });
+
+//     await newAdmin.save();
+//     res.status(201).json({ message: "Admin account created successfully" });
+//   } catch (error) {
+//     res.status(500).json({ error: "Failed to create admin account" });
+//   }
+// });
+
+
 
 app.post("/login", async (req, res) => {
   const { email, password, role } = req.body;
@@ -173,31 +210,54 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// const authenticateAdmin = async (req, res, next) => {
+//   const token = req.cookies.jwt;
+//   if (!token) {
+//     return res.status(401).json({ error: "Unauthorized, please login" });
+//   }
+//   try {
+//     const decoded = jwt.verify(
+//       token,
+//       process.env.JWT_SECRET || "default_secret"
+//     );
+//     const user = await User.findById(decoded.userId);
+//     if (!user || user.role !== "admin") {
+//       return res.status(403).json({ error: "Only admin can add products" });
+//     }
+//     req.user = user; // Attach user data to the request
+//     next();
+//   } catch (err) {
+//     return res.status(401).json({
+//       error:
+//         err.name === "TokenExpiredError"
+//           ? "Token has expired, please login again"
+//           : "Unauthorized",
+//     });
+//   }
+// };
 const authenticateAdmin = async (req, res, next) => {
   const token = req.cookies.jwt;
   if (!token) {
     return res.status(401).json({ error: "Unauthorized, please login" });
   }
+
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "default_secret"
-    );
-    const user = await User.findById(decoded.userId);
-    if (!user || user.role !== "admin") {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "default_secret");
+    const admin = await Admin.findById(decoded.userId);  
+
+    if (!admin || admin.role !== "admin") {
       return res.status(403).json({ error: "Only admin can add products" });
     }
-    req.user = user; // Attach user data to the request
-    next();
+
+    req.user = admin;
+    next();  
   } catch (err) {
     return res.status(401).json({
-      error:
-        err.name === "TokenExpiredError"
-          ? "Token has expired, please login again"
-          : "Unauthorized",
+      error: err.name === "TokenExpiredError" ? "Token has expired, please login again" : "Unauthorized",
     });
   }
 };
+
 
 app.post(
   "/add",
