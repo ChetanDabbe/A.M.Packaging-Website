@@ -59,6 +59,7 @@ function LoginPageCust() {
 
       if (response.ok) {
         Cookies.set("jwt", data.token, { expires: 1 });
+        Cookies.set("role", userType === "user_login" ? "user" : "admin", { expires: 1 }); 
 
         if (userType === "user_login") {
           alert(`Login Successful as User`);

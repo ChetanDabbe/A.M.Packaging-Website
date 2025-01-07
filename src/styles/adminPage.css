@@ -1,92 +1,108 @@
-/* adminPage.css */
-.admin-container {
-    padding: 2rem;
-    font-family: Arial, sans-serif;
+.admin_container {
+  display: flex;
+  width: 100vw;
+}
+
+.admin_sidebar_open {
+  width: 16rem;
+  max-width: 50%;
+  background-color: black;
+  color: white;
+  height: 100vh;
+  padding-top: 1.25rem;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: width 0.3s ease;
+}
+
+.admin_sidebar_close {
+  width: 4rem;
+  background-color: black;
+  color: white;
+  height: 100vh;
+  padding-top: 1.25rem;
+  position: fixed;
+  left: 0;
+  top: 0;
+  transition: width 0.3s ease;
+}
+
+.admin_heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.25rem;
+}
+
+.admin_heading_open {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.menu_btn {
+  cursor: pointer;
+}
+
+.admin_tabs_close {
+  display: none;
+  background-color: black;
+  height: 100vh;
+}
+
+.admin_tabs {
+  margin-top: 3rem;
+}
+
+.admin_tabs button {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background: none;
+  color: white;
+  font-size: 1.125rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.admin_tabs button:hover {
+  background-color: #34495e;
+}
+
+.admin_tabs button svg {
+  margin-right: 1rem;
+}
+
+.sidebar_menu_open {
+  display: flex;
+  flex-direction: column;
+  width: calc(100vw - 16rem);
+  height: 100vh;
+  margin-left: 16rem;
+}
+
+@media (max-width: 768px) {
+  .admin_sidebar_open {
+    width: 12rem;
   }
-  
-  .admin-dashboard {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+
+  .admin_sidebar_close {
+    width: 5rem;
   }
-  
-  .admin-heading {
-    text-align: center;
-    font-size: 2.5rem;
-    color: #333;
+
+  .admin_heading h3 {
+    font-size: 1.25rem;
   }
-  
-  .admin-section {
-    background-color: #f8f8f8;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-  }
-  
-  .section-heading {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .product-heading {
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-  }
-  
-  .admin-button {
-    padding: 0.75rem 1rem;
+
+  .admin_tabs button {
     font-size: 1rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 0.375rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
   }
-  
-  .admin-button:hover {
-    background-color: #0056b3;
+
+  .sidebar_menu_open {
+    width: calc(100vw - 12rem);
+    margin-left: 12rem;
   }
-  
-  .add-product-btn {
-    margin-bottom: 1.5rem;
-  }
-  
-  .admin-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1.5rem;
-  }
-  
-  .admin-table th, .admin-table td {
-    padding: 1rem;
-    text-align: left;
-  }
-  
-  .admin-table th {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .admin-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  @media (max-width: 768px) {
-    .admin-heading {
-      font-size: 2rem;
-    }
-  
-    .section-heading {
-      font-size: 1.5rem;
-    }
-  
-    .admin-table th, .admin-table td {
-      padding: 0.5rem;
-    }
-  
-    .admin-container {
-      padding: 1.5rem;
-    }
-  }
-  
+}

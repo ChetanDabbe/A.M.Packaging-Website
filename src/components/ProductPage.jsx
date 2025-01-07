@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie"; // Import js-cookie to handle cookies
+import Cookies from "js-cookie"; 
 import "../styles/ProductPage.css";
 import { FaSearch, FaUser, FaShoppingCart } from "react-icons/fa";
 import Navbar from "./Navbar";
@@ -11,6 +11,7 @@ function ProductPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [quantities, setQuantities] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
 
   const fetchProducts = async () => {
     try {
@@ -37,9 +38,9 @@ function ProductPage() {
   }, []);
 
   const handleLogout = () => {
-    Cookies.remove("jwt"); // Remove JWT token from cookies
+    Cookies.remove("jwt"); 
     setIsLoggedIn(false);
-    navigate("/product/login-page"); // Redirect to login page
+    navigate("/product/");
   };
 
   const openLoginInPage = () => {

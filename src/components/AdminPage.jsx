@@ -1,133 +1,78 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-import "../styles/adminPage.css"; 
+import React, { useState } from "react";
+import {useNavigate} from "react-router-dom";
+import {
+  FaBars,
+  FaTachometerAlt,
+  FaBox,
+  FaUsers,
+  FaCog,
+  FaSignOutAlt,
+} from "react-icons/fa";
+import "../styles/adminPage.css";
+import Dashboard from "./Dashboard";
+import AdminProductPage from "./AdminProductPage";
+import AdminUser from "./AdminUser";
+import AdminSetting from "./AdminSetting";
+
 function AdminPage() {
-  const [products, setProducts] = useState([]);
-  const [users, setUsers] = useState([]);
-  const navigate = useNavigate();
+  const [openMenu, setOpenMenu] = useState(true);
+  const [activeTab, setActiveTab] = useState("dashboard");
 
-  useEffect(() => {
-    const token = Cookies.get("jwt");
-    if (!token) {
-      navigate("/login"); 
-    } else {
-      fetchProducts();
-      fetchUsers();
-    }
-  }, [navigate]);
-
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/products");
-      const data = await response.json();
-      if (response.ok) {
-        setProducts(data);
-      } else {
-        alert("Error fetching products");
-      }
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      alert("Error fetching products");
-    }
+  const handleMenuBtn = () => {
+    setOpenMenu(!openMenu);
   };
+  const navigate=useNavigate();
+  const handleAdminPageLogout=()=>{
+    navigate("/");
+  }
 
-  
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/users"); 
-      const data = await response.json();
-      if (response.ok) {
-        setUsers(data);
-      } else {
-        alert("Error fetching users");
-      }
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      alert("Error fetching users");
+  const renderContent = () => {
+    switch (activeTab) {
+      case "dashboard":
+        return <Dashboard />;
+      case "products_admin":
+        return <AdminProductPage />;
+      case "users":
+        return <AdminUser />;
+      case "settings":
+        return <AdminSetting />;
+      default:
+        return <Dashboard />;
     }
   };
 
   return (
-    <div className="admin-container">
-      <h1>Welcome, Admin</h1>
+    <div className="admin_container">
+      <div className={openMenu ? "admin_sidebar_open" : "admin_sidebar_close"}>
+        <div className="admin_heading">
+          {openMenu && <h3 className="admin_heading_open">A.M.Packaging</h3>}
+          <FaBars
+            style={{ fontSize: "24px", color: "white" }}
+            className="menu_btn"
+            onClick={handleMenuBtn}
+          />
+        </div>
 
-      <div className="admin-dashboard">
-        <section className="product-management">
-          <h2>Manage Products</h2>
-          <button className="add-product-btn" onClick={() => navigate("/add-product")}>
-            Add New Product
+        <div className={openMenu ? "admin_tabs" : "admin_tabs_close"}>
+          <button onClick={() => setActiveTab("dashboard")}>
+            <FaTachometerAlt /> {openMenu && "Dashboard"}
           </button>
-
-          <div className="products-list">
-            <h3>Product List</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Product Name</th>
-                  <th>Price</th>
-                  <th>Capacity</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.length > 0 ? (
-                  products.map((product) => (
-                    <tr key={product._id}>
-                      <td>{product.productName}</td>
-                      <td>{product.price}</td>
-                      <td>{product.capacity}</td>
-                      <td>
-                        <button>Edit</button>
-                        <button>Delete</button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4">No products available</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section className="user-management">
-          <h2>Manage Users</h2>
-          <div className="users-list">
-            <h3>User List</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.length > 0 ? (
-                  users.map((user) => (
-                    <tr key={user._id}>
-                      <td>{user.firstName} {user.lastName}</td>
-                      <td>{user.email}</td>
-                      <td>{user.role}</td>
-                      <td>
-                        <button>Edit</button>
-                        <button>Delete</button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4">No users available</td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </section>
+          <button onClick={() => setActiveTab("products_admin")}>
+            <FaBox /> {openMenu && "Products"}
+          </button>
+          <button onClick={() => setActiveTab("users")}>
+            <FaUsers /> {openMenu && "Users"}
+          </button>
+          <button onClick={() => setActiveTab("settings")}>
+            <FaCog /> {openMenu && "Settings"}
+          </button>
+          <button onClick={handleAdminPageLogout}>
+            <FaSignOutAlt /> {openMenu && "Logout"}
+          </button>
+        </div>
+      </div>
+      <div className="sidebar_menu_open">
+        {renderContent()}
       </div>
     </div>
   );
