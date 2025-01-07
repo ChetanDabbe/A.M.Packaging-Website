@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   FaBars,
   FaTachometerAlt,
@@ -21,10 +21,11 @@ function AdminPage() {
   const handleMenuBtn = () => {
     setOpenMenu(!openMenu);
   };
-  const navigate=useNavigate();
-  const handleAdminPageLogout=()=>{
+
+  const navigate = useNavigate();
+  const handleAdminPageLogout = () => {
     navigate("/");
-  }
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -71,7 +72,7 @@ function AdminPage() {
           </button>
         </div>
       </div>
-      <div className="sidebar_menu_open">
+      <div className={`sidebar_menu_open ${!openMenu ? "collapsed" : ""}`}>
         {renderContent()}
       </div>
     </div>

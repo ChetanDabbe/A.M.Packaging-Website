@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie"; 
+import Cookies from "js-cookie";
 import "../styles/ProductPage.css";
 import { FaSearch, FaUser, FaShoppingCart } from "react-icons/fa";
 import Navbar from "./Navbar";
@@ -11,7 +11,6 @@ function ProductPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [quantities, setQuantities] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
 
   const fetchProducts = async () => {
     try {
@@ -38,7 +37,7 @@ function ProductPage() {
   }, []);
 
   const handleLogout = () => {
-    Cookies.remove("jwt"); 
+    Cookies.remove("jwt");
     setIsLoggedIn(false);
     navigate("/product/");
   };
@@ -105,10 +104,17 @@ function ProductPage() {
                   alt={product.productName}
                   className="product_image"
                 />
+               {console.log("Product Image:", product.image)}
+
               </div>
               <div className="fetch_product_detail">
                 <h3 className="product_name">{product.productName}</h3>
-                <p className="product_price" style={{color:"green", fontWeight:"bold"}}>Rs. {product.price}</p>
+                <p
+                  className="product_price"
+                  style={{ color: "green", fontWeight: "bold" }}
+                >
+                  Rs. {product.price}
+                </p>
                 <ul className="product_features">
                   {product.features.map((feature, index) => (
                     <li key={index}>{feature}</li>
@@ -122,7 +128,8 @@ function ProductPage() {
                       onClick={() => decrementQuantity(product._id)}
                     >
                       –
-                    </button>&nbsp;&nbsp;&nbsp;&nbsp;
+                    </button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
                     <span className="quantity_value">
                       {quantities[product._id]}
                     </span>
@@ -136,8 +143,22 @@ function ProductPage() {
                   </div>
                 </div>
                 <div className="product_buttons">
-                  <button className="buy_now_btn" style={{backgroundColor: "black"}}>Buy Now</button>
-                  <button className="add_to_cart_btn" style={{backgroundColor:"white", color:"#0056b3", border:"2px solid silver"}}>Add to Cart</button>
+                  <button
+                    className="buy_now_btn"
+                    style={{ backgroundColor: "black" }}
+                  >
+                    Buy Now
+                  </button>
+                  <button
+                    className="add_to_cart_btn"
+                    style={{
+                      backgroundColor: "white",
+                      color: "#0056b3",
+                      border: "2px solid silver",
+                    }}
+                  >
+                    Add to Cart
+                  </button>
                 </div>
               </div>
             </div>

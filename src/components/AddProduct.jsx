@@ -56,15 +56,24 @@ function AddProduct() {
         data.append("productImage", formData.productImage);
       }
 
+      // Retrieve token from localStorage or cookies
+      const token = localStorage.getItem("jwtToken") || document.cookie.replace(/(?:(?:^|.*;\s*)jwt\s*=\s*([^;]*).*$)|^.*$/, "$1");
+
+      // Send the token in Authorization header if available
       const response = await axios.post("http://localhost:5000/add", data, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
         },
+        withCredentials: true,  // Ensure cookies are sent
       });
 
       alert(response.data.message);
     } catch (error) {
-      alert("Error uploading product: " + error.response?.data?.error || error.message);
+      alert(
+        "Error uploading product: " +
+          (error.response?.data?.error || error.response?.data || error.message)
+      );
     }
   };
 

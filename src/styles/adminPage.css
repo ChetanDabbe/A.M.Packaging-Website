@@ -1,6 +1,7 @@
 .admin_container {
   display: flex;
-  width: 100vw;
+  width: 92vw;
+  
 }
 
 .admin_sidebar_open {
@@ -14,6 +15,7 @@
   left: 0;
   top: 0;
   transition: width 0.3s ease;
+  /* margin-right:2rem; */
 }
 
 .admin_sidebar_close {
@@ -26,6 +28,7 @@
   left: 0;
   top: 0;
   transition: width 0.3s ease;
+  /* margin-right:5rem; */
 }
 
 .admin_heading {
@@ -82,6 +85,11 @@
   width: calc(100vw - 16rem);
   height: 100vh;
   margin-left: 16rem;
+}
+
+.sidebar_menu_open.collapsed {
+  width: calc(100vw - 4rem);
+  margin-left: 4rem;
 }
 
 @media (max-width: 768px) {
