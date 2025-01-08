@@ -248,6 +248,8 @@ const authenticateAdmin = async (req, res, next) => {
     }
 
     req.user = admin;
+    console.log("Authenticated admin:", admin); 
+
     next();
   } catch (err) {
     return res.status(401).json({
@@ -330,53 +332,52 @@ app.delete("/delete/:id", authenticateAdmin, async (req, res) => {
 //     res.status(500).json({ error: "Failed to update product" });
 //   }
 // });
+
+
+//Updating the product details
 app.put("/update/:id", authenticateAdmin, upload.single('image'), async (req, res) => {
   const { id } = req.params;
   const { productName, price, capacity, features } = req.body;
 
-  // Log incoming request data
   console.log("Request ID:", id);
   console.log("Request body:", req.body);
-  console.log("Uploaded file:", req.file); // Logs file details (if any)
+  console.log("Uploaded file:", req.file); 
 
   try {
-    // Find the existing product by ID
+    
     const product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
     }
 
-    // Log the old image path before update
+    
     console.log("Old image path:", product.image);
 
-    // Initialize an object to hold the fields that will be updated
+    
     const updateFields = {};
 
-    // Check each field and only add it if it's provided in the request body
+  
     if (productName !== undefined) updateFields.productName = productName;
     if (price !== undefined) updateFields.price = price;
     if (capacity !== undefined) updateFields.capacity = capacity;
     if (features !== undefined) updateFields.features = features;
 
-    // If a new image is uploaded, add it to the updateFields object
+  
     if (req.file) {
       const oldImagePath = path.join(__dirname, product.image);
       if (product.image && fs.existsSync(oldImagePath)) {
-        fs.unlinkSync(oldImagePath); // Delete old image
+        fs.unlinkSync(oldImagePath);
       }
-      updateFields.image = req.file.path; // Add new image path from multer storage
-      console.log("New image path:", req.file.path); // Log the new image path
+      updateFields.image = req.file.path;
+      console.log("New image path:", req.file.path); 
     }
 
-    // If no fields are provided for update, return an error
     if (Object.keys(updateFields).length === 0) {
       return res.status(400).json({ error: "No fields to update" });
     }
 
-    // Log the fields that will be updated
     console.log("Updating product with ID:", id, "Fields:", updateFields);
 
-    // Update the product with the provided fields
     const updatedProduct = await Product.findByIdAndUpdate(id, updateFields, {
       new: true,
     });
@@ -385,7 +386,6 @@ app.put("/update/:id", authenticateAdmin, upload.single('image'), async (req, re
       return res.status(404).json({ error: "Product not found after update" });
     }
 
-    // Return success response
     res.status(200).json({ message: "Product updated successfully", updatedProduct });
   } catch (err) {
     console.error("Error updating product:", err.message); // Log error
@@ -394,8 +394,83 @@ app.put("/update/:id", authenticateAdmin, upload.single('image'), async (req, re
 });
 
 
+//Updating the admin password
+
+// app.put("/updateAdminpassword", authenticateAdmin, async (req, res) => {
+//   const { oldPassword, newPassword } = req.body;
+
+//   if (!oldPassword || !newPassword) {
+//     return res.status(400).json({ error: "Old password and new password are required" });
+//   }
+
+//   try {
+//     const admin = req.user;
+
+//     if (!admin) {
+//       return res.status(401).json({ error: "Unauthorized, admin not found" });
+//     }
+
+//     const adminFromDB = await Admin.findById(admin._id);
+
+//     if (!adminFromDB) {
+//       return res.status(404).json({ error: "Admin not found in the database" });
+//     }
+
+//     console.log("Admin found:", adminFromDB);
+
+//     const isPasswordValid = await bcrypt.compare(oldPassword, adminFromDB.password);
+
+//     if (!isPasswordValid) {
+//       return res.status(400).json({ error: "Old password is incorrect" });
+//     }
+
+//     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+//     console.log("New password hash:", hashedNewPassword);
+
+//     adminFromDB.password = hashedNewPassword;
+//     await adminFromDB.save();
+
+//     res.status(200).json({ message: "Password updated successfully" });
+//   } catch (err) {
+//     console.error("Error updating password:", err.message);
+//     res.status(500).json({ error: "Failed to update password" });
+//   }
+// });
+
+app.put('/updateAdminPassword', authenticateAdmin, async (req, res) => {
+  const admin = req.user;
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ error: 'Please provide both current and new passwords' });
+  }
+
+  try {
+    const isMatch = await bcrypt.compare(currentPassword, admin.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Current password is incorrect' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    admin.password = hashedPassword;
+    await admin.save();
+
+    res.status(200).json({ message: 'Password updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Something went wrong, please try again' });
+  }
+});
 
 
+
+
+
+
+//Add the product which is only accessible by admin
 app.post(
   "/add",
   authenticateAdmin,
@@ -445,6 +520,8 @@ app.post(
   }
 );
 
+
+//Retriving the product to display
 app.get("/products", async (req, res) => {
   try {
     const products = await Product.find();
@@ -453,5 +530,24 @@ app.get("/products", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+//Retriving the user data to display in user section of admin panel
+app.get("/user", async (req, res) => {
+  try {
+    const users = await User.find({}, "firstName lastName email mobile companyName").lean();
+    const formattedUsers = users.map(user => ({
+      name: `${user.firstName} ${user.lastName}`,
+      email: user.email,
+      mobile: user.mobile,
+      companyName: user.companyName,
+    }));
+    res.status(200).json(formattedUsers);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
