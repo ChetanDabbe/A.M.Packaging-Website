@@ -7,8 +7,8 @@ const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 // const helmet = require("helmet");
 const jwt = require("jsonwebtoken");
-const path = require('path');
-
+const path = require("path");
+const fs = require('fs');
 const app = express();
 app.use(cookieParser());
 // app.use(helmet());
@@ -17,14 +17,13 @@ dotenv.config();
 
 const port = process.env.PORT || 5000;
 
-
-app.use(cors({
-  origin: 'http://localhost:3000',  // Replace with your frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-}));
-
-
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Replace with your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -34,10 +33,9 @@ mongoose
   .then(() => console.log("DB connected"))
   .catch((err) => console.error("DB connection error:", err));
 
-
-  // app.use(cors());
+// app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
@@ -121,7 +119,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-
 // app.post("/register", async (req, res) => {
 //   const { firstName, lastName, email, mobile, password, companyName } = req.body;
 
@@ -153,8 +150,6 @@ app.post("/register", async (req, res) => {
 //     res.status(500).json({ error: "Failed to create admin account" });
 //   }
 // });
-
-
 
 app.post("/login", async (req, res) => {
   const { email, password, role } = req.body;
@@ -242,21 +237,163 @@ const authenticateAdmin = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || "default_secret");
-    const admin = await Admin.findById(decoded.userId);  
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || "default_secret"
+    );
+    const admin = await Admin.findById(decoded.userId);
 
     if (!admin || admin.role !== "admin") {
       return res.status(403).json({ error: "Only admin can add products" });
     }
 
     req.user = admin;
-    next();  
+    next();
   } catch (err) {
     return res.status(401).json({
-      error: err.name === "TokenExpiredError" ? "Token has expired, please login again" : "Unauthorized",
+      error:
+        err.name === "TokenExpiredError"
+          ? "Token has expired, please login again"
+          : "Unauthorized",
     });
   }
 };
+
+app.delete("/delete/:id", authenticateAdmin, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    if (product.image) {
+      const imagePath = path.join(__dirname, product.image);
+       
+      
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      } else {
+       
+      }
+    }
+
+    await Product.findByIdAndDelete(id); 
+    res.status(200).json({ message: "Product deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting product:", err.message);
+    res.status(500).json({ error: "Failed to delete product" });
+  }
+});
+
+// app.put("/update/:id", authenticateAdmin, async (req, res) => {
+//   const { id } = req.params;
+//   const { productName, price, capacity, features, image } = req.body;
+
+//   try {
+//     const product = await Product.findById(id);
+//     if (!product) {
+//       return res.status(404).json({ error: "Product not found" });
+//     }
+
+//     console.log("Request body:", req.body); // Debug: log incoming data
+
+//     const updateFields = { 
+//       productName, 
+//       price, 
+//       capacity, 
+//       features 
+//     };
+
+//     if (image) {
+//       const oldImagePath = path.join(__dirname, product.image);
+//       if (product.image && fs.existsSync(oldImagePath)) {
+//         fs.unlinkSync(oldImagePath); // Delete old image
+//       }
+//       updateFields.image = image; // Update image path
+//     }
+
+//     console.log("Updating product with ID:", id, "Fields:", updateFields); // Debug log
+
+//     const updatedProduct = await Product.findByIdAndUpdate(id, updateFields, {
+//       new: true,
+//     });
+
+//     if (!updatedProduct) {
+//       return res.status(404).json({ error: "Product not found after update" });
+//     }
+
+//     res.status(200).json({ message: "Product updated successfully", updatedProduct });
+//   } catch (err) {
+//     console.error("Error updating product:", err.message); // Log error
+//     res.status(500).json({ error: "Failed to update product" });
+//   }
+// });
+app.put("/update/:id", authenticateAdmin, upload.single('image'), async (req, res) => {
+  const { id } = req.params;
+  const { productName, price, capacity, features } = req.body;
+
+  // Log incoming request data
+  console.log("Request ID:", id);
+  console.log("Request body:", req.body);
+  console.log("Uploaded file:", req.file); // Logs file details (if any)
+
+  try {
+    // Find the existing product by ID
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Log the old image path before update
+    console.log("Old image path:", product.image);
+
+    // Initialize an object to hold the fields that will be updated
+    const updateFields = {};
+
+    // Check each field and only add it if it's provided in the request body
+    if (productName !== undefined) updateFields.productName = productName;
+    if (price !== undefined) updateFields.price = price;
+    if (capacity !== undefined) updateFields.capacity = capacity;
+    if (features !== undefined) updateFields.features = features;
+
+    // If a new image is uploaded, add it to the updateFields object
+    if (req.file) {
+      const oldImagePath = path.join(__dirname, product.image);
+      if (product.image && fs.existsSync(oldImagePath)) {
+        fs.unlinkSync(oldImagePath); // Delete old image
+      }
+      updateFields.image = req.file.path; // Add new image path from multer storage
+      console.log("New image path:", req.file.path); // Log the new image path
+    }
+
+    // If no fields are provided for update, return an error
+    if (Object.keys(updateFields).length === 0) {
+      return res.status(400).json({ error: "No fields to update" });
+    }
+
+    // Log the fields that will be updated
+    console.log("Updating product with ID:", id, "Fields:", updateFields);
+
+    // Update the product with the provided fields
+    const updatedProduct = await Product.findByIdAndUpdate(id, updateFields, {
+      new: true,
+    });
+
+    if (!updatedProduct) {
+      return res.status(404).json({ error: "Product not found after update" });
+    }
+
+    // Return success response
+    res.status(200).json({ message: "Product updated successfully", updatedProduct });
+  } catch (err) {
+    console.error("Error updating product:", err.message); // Log error
+    res.status(500).json({ error: "Failed to update product", details: err.message });
+  }
+});
+
+
 
 
 app.post(

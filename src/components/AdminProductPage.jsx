@@ -1,8 +1,15 @@
 // import React, { useState, useEffect } from "react";
+// import { FaEdit, FaTrash } from "react-icons/fa";
+
 // import "../styles/adminProductPage.css";
+// import AddProduct from "./AddProduct";
+// import EditProductBtn from "./EditProductBtn";
 
 // function AdminProductPage() {
 //   const [productsAdmin, setProductsAdmin] = useState([]);
+//   const [showAddProduct, setShowAddProduct] = useState(false);
+//   const [showEditProduct, setShowEditProduct] = useState(false);
+//   const [selectedProduct, setSelectedProduct] = useState(null);
 
 //   const fetchProductAdmin = async () => {
 //     try {
@@ -14,9 +21,41 @@
 //     }
 //   };
 
-//   const adminAddProduct=()=>{
-    
-//   }
+//   const toggleAddProduct = () => {
+//     setShowAddProduct((prevState) => !prevState);
+//   };
+
+//   const toggleEditProduct = (product) => {
+//     setSelectedProduct(product);
+//     setShowEditProduct((prevState) => !prevState);
+//   };
+
+//   const handleDeleteProduct = async (productId) => {
+// 	const confirmDelete = window.confirm("Are you sure you want to delete the selected product?");
+// 	if (confirmDelete) {
+// 	  try {
+// 		const response = await fetch(`http://localhost:5000/delete/${productId}`, {
+// 		  method: "DELETE",
+// 		  credentials: "include",  
+// 		  headers: {
+// 			"Content-Type": "application/json",
+// 		  },
+// 		});
+  
+// 		if (response.ok) {
+// 		  alert("Product deleted successfully");
+// 		  // Remove the deleted product from the local state without fetching again
+// 		  setProductsAdmin(productsAdmin.filter(product => product._id !== productId));
+// 		} else {
+// 		  const errorData = await response.json();
+// 		  alert(`Failed to delete product: ${errorData.error || 'Unknown error'}`);
+// 		}
+// 	  } catch (error) {
+// 		alert(`Error deleting product: ${error.message}`);
+// 	  }
+// 	}
+//   };
+	
 
 //   useEffect(() => {
 //     fetchProductAdmin();
@@ -31,10 +70,41 @@
 //       <div className="admin_product_cont_back">
 //         <div className="admin_product_cont2">
 //           <h3>Product Management</h3>
-//           <button className="admin_add_product_btn" onClick={adminAddProduct}>
+//           <button
+//             className="admin_add_product_btn"
+//             onClick={toggleAddProduct}
+//           >
 //             +&nbsp;&nbsp; Add Product
 //           </button>
 //         </div>
+
+//         {showAddProduct && (
+//           <div className="modal-overlay">
+//             <div className="modal-content">
+//               <button
+//                 className="close-btn"
+//                 onClick={toggleAddProduct}
+//               >
+//                 &times;
+//               </button>
+//               <AddProduct />
+//             </div>
+//           </div>
+//         )}
+
+//         {showEditProduct && selectedProduct && (
+//           <div className="modal-overlay">
+//             <div className="modal-content">
+//               <button
+//                 className="close-btn"
+//                 onClick={() => setShowEditProduct(false)}
+//               >
+//                 &times;
+//               </button>
+//               <EditProductBtn product={selectedProduct} />
+//             </div>
+//           </div>
+//         )}
 
 //         <div className="admin_product_table">
 //           <table>
@@ -64,8 +134,21 @@
 //                     <td>{product.capacity}</td>
 //                     <td>₹{product.price}</td>
 //                     <td>
-//                       <button className="edit_btn">Edit</button>
-//                       <button className="delete_btn">Delete</button>
+//                     <div class="edit_delete_btn_container">
+
+//                       <button
+//                         className="edit_btn"
+//                         onClick={() => toggleEditProduct(product)}
+//                       >
+//                         <FaEdit /> Edit
+//                       </button>
+//                       <button
+//                         className="delete_btn"
+//                         onClick={() => handleDeleteProduct(product._id)}
+//                       >
+//                         <FaTrash /> Delete
+//                       </button>
+//                       </div>
 //                     </td>
 //                   </tr>
 //                 ))
@@ -85,15 +168,18 @@
 // }
 
 // export default AdminProductPage;
-
-
 import React, { useState, useEffect } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
+
 import "../styles/adminProductPage.css";
 import AddProduct from "./AddProduct";
+import EditProductBtn from "./EditProductBtn";
 
 function AdminProductPage() {
   const [productsAdmin, setProductsAdmin] = useState([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
+  const [showEditProduct, setShowEditProduct] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const fetchProductAdmin = async () => {
     try {
@@ -107,6 +193,45 @@ function AdminProductPage() {
 
   const toggleAddProduct = () => {
     setShowAddProduct((prevState) => !prevState);
+  };
+
+  const toggleEditProduct = (product) => {
+    setSelectedProduct(product);
+    setShowEditProduct((prevState) => !prevState);
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete the selected product?");
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`http://localhost:5000/delete/${productId}`, {
+          method: "DELETE",
+          credentials: "include",  
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          alert("Product deleted successfully");
+          // Remove the deleted product from the local state without fetching again
+          setProductsAdmin(productsAdmin.filter(product => product._id !== productId));
+        } else {
+          const errorData = await response.json();
+          alert(`Failed to delete product: ${errorData.error || 'Unknown error'}`);
+        }
+      } catch (error) {
+        alert(`Error deleting product: ${error.message}`);
+      }
+    }
+  };
+
+  const updateProductInList = (updatedProduct) => {
+    setProductsAdmin((prevProducts) =>
+      prevProducts.map((product) =>
+        product._id === updatedProduct._id ? updatedProduct : product
+      )
+    );
   };
 
   useEffect(() => {
@@ -137,9 +262,23 @@ function AdminProductPage() {
                 className="close-btn"
                 onClick={toggleAddProduct}
               >
-                &times; 
+                &times;
               </button>
               <AddProduct />
+            </div>
+          </div>
+        )}
+
+        {showEditProduct && selectedProduct && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <button
+                className="close-btn"
+                onClick={() => setShowEditProduct(false)}
+              >
+                &times;
+              </button>
+              <EditProductBtn product={selectedProduct} updateProductList={updateProductInList}  setShowEditProduct={setShowEditProduct}/>
             </div>
           </div>
         )}
@@ -172,8 +311,20 @@ function AdminProductPage() {
                     <td>{product.capacity}</td>
                     <td>₹{product.price}</td>
                     <td>
-                      <button className="edit_btn">Edit</button>
-                      <button className="delete_btn">Delete</button>
+                      <div className="edit_delete_btn_container">
+                        <button
+                          className="edit_btn"
+                          onClick={() => toggleEditProduct(product)}
+                        >
+                          <FaEdit /> Edit
+                        </button>
+                        <button
+                          className="delete_btn"
+                          onClick={() => handleDeleteProduct(product._id)}
+                        >
+                          <FaTrash /> Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))

@@ -80,13 +80,19 @@
 
 .edit_btn,
 .delete_btn {
-  padding: 0.6rem 1.6rem;
-  font-size: 1.4rem;
+  padding: 0.6rem 1.1rem;
+  font-size: 0.8rem;
   border: none;
   border-radius: 0.4rem;
   cursor: pointer;
 }
 
+.edit_delete_btn_container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; 
+  gap: 0.8rem;
+}
 .edit_btn {
   background-color: #2196f3;
   color: white;
