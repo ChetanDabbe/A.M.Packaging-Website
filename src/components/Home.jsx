@@ -1,92 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar.jsx';
 import '../styles/home.css';
-import bottle1 from '../assets/bottle1.jpg';
-import bottle2 from '../assets/bottle2.jpg';
 import Frame4 from './Frame4.jsx';
 import Frame5 from './Frame5.jsx';
 import Frame6 from './Frame6.jsx';
 import Frame7 from './Frame7.jsx';
 import Frame8 from './Frame8.jsx';
-import { useNavigate } from 'react-router-dom';  
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+    const [products, setProducts] = useState([]);
     const [showAllProducts, setShowAllProducts] = useState(false);
-    const navigate=useNavigate();
-    const [products] = useState([
-        {
-            id: 1,
-            name: '375ml PET Wine Bottle',
-            imageUrl: bottle1,
-            features: [
-                'Lightweight and durable',
-                'Perfect for wine packaging',
-                'Eco-friendly material'
-            ]
-        },
-        {
-            id: 2,
-            name: '1000ml Plastic Bottle',
-            imageUrl: bottle2,
-            features: [
-                'Ideal for large beverages',
-                'Sturdy and reusable',
-                'BPA-free plastic'
-            ]
-        },
-        {
-            id: 3,
-            name: '500ml PET Juice Bottle',
-            imageUrl: bottle1,
-            features: [
-                'Compact and portable',
-                'Crystal-clear visibility',
-                'Leak-proof cap'
-            ]
-        },
-        {
-            id: 4,
-            name: '750ml PET Soda Bottle',
-            imageUrl: bottle2,
-            features: [
-                'Pressure-resistant',
-                'Keeps carbonation intact',
-                'Easy grip design'
-            ]
-        },
-        {
-            id: 5,
-            name: '600ml PET Water Bottle',
-            imageUrl: bottle1,
-            features: [
-                'Ergonomic shape',
-                'Refillable and recyclable',
-                'Odorless and tasteless'
-            ]
-        },
-        {
-            id: 6,
-            name: '1500ml PET Oil Bottle',
-            imageUrl: bottle2,
-            features: [
-                'High capacity',
-                'Easy pour spout',
-                'Ideal for cooking oils'
-            ]
-        },
-        {
-            id: 7,
-            name: '1500ml PET Oil Bottle',
-            imageUrl: bottle2,
-            features: [
-                'High capacity',
-                'Easy pour spout',
-                'Ideal for cooking oils'
-            ]
-        }
-    ]);
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null); 
+
     
-    function order_products(){
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/products'); 
+                if (!response.ok) {
+                    throw new Error('Failed to fetch products');
+                }
+                const data = await response.json();
+                setProducts(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+    function orderProducts() {
         navigate('/product');
     }
 
@@ -118,31 +66,36 @@ function Home() {
                 </p>
 
                 <div className="products_bottle">
-                    {displayedProducts.map((product) => (
-                        <div key={product.id} className="product">
-                            <div className="photo">
-                                <img src={product.imageUrl || 'default.jpg'} alt={product.name} />
+                    {loading ? (
+                        <p>Loading products...</p>
+                    ) : error ? (
+                        <p style={{ color: 'red' }}>{error}</p>
+                    ) : (
+                        displayedProducts.map((product) => (
+                            <div key={product._id} className="product">
+                                <div className="photo">
+                                    <img src={`http://localhost:5000/${product.image}`|| 'default.jpg'} alt={product.productName} />
+                                </div>
+                                <div className="product_content">
+                                    <p>{product.productName}</p>
+                                </div>
+                                <div className="btn_order">
+                                    <button className="order_btn" onClick={orderProducts}>Order Now</button>
+                                </div>
                             </div>
-                            <div className="product_content">
-                                <p>{product.name}</p>
-                            </div>
-                            <div className="btn_order">
-                                <button className="order_btn" onClick={order_products}>Order Now</button>
-                            </div>
-                        </div>
-                    ))}
+                        ))
+                    )}
                 </div>
 
                 <button onClick={showProduct} className="view_btn">
                     View all products
                 </button>
 
-                <Frame4/>
-
-                <Frame5/>
-                <Frame6/>
-                <Frame7/>
-                <Frame8/>
+                <Frame4 />
+                <Frame5 />
+                <Frame6 />
+                <Frame7 />
+                <Frame8 />
             </div>
         </>
     );

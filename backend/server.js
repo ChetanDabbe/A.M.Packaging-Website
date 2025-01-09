@@ -396,47 +396,6 @@ app.put("/update/:id", authenticateAdmin, upload.single('image'), async (req, re
 
 //Updating the admin password
 
-// app.put("/updateAdminpassword", authenticateAdmin, async (req, res) => {
-//   const { oldPassword, newPassword } = req.body;
-
-//   if (!oldPassword || !newPassword) {
-//     return res.status(400).json({ error: "Old password and new password are required" });
-//   }
-
-//   try {
-//     const admin = req.user;
-
-//     if (!admin) {
-//       return res.status(401).json({ error: "Unauthorized, admin not found" });
-//     }
-
-//     const adminFromDB = await Admin.findById(admin._id);
-
-//     if (!adminFromDB) {
-//       return res.status(404).json({ error: "Admin not found in the database" });
-//     }
-
-//     console.log("Admin found:", adminFromDB);
-
-//     const isPasswordValid = await bcrypt.compare(oldPassword, adminFromDB.password);
-
-//     if (!isPasswordValid) {
-//       return res.status(400).json({ error: "Old password is incorrect" });
-//     }
-
-//     const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-
-//     console.log("New password hash:", hashedNewPassword);
-
-//     adminFromDB.password = hashedNewPassword;
-//     await adminFromDB.save();
-
-//     res.status(200).json({ message: "Password updated successfully" });
-//   } catch (err) {
-//     console.error("Error updating password:", err.message);
-//     res.status(500).json({ error: "Failed to update password" });
-//   }
-// });
 
 app.put('/updateAdminPassword', authenticateAdmin, async (req, res) => {
   const admin = req.user;

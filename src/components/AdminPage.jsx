@@ -13,7 +13,7 @@ import Dashboard from "./Dashboard";
 import AdminProductPage from "./AdminProductPage";
 import AdminUser from "./AdminUser";
 import AdminSetting from "./AdminSetting";
-
+import Cookies from "js-cookie"; 
 function AdminPage() {
   const [openMenu, setOpenMenu] = useState(true);
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -24,6 +24,8 @@ function AdminPage() {
 
   const navigate = useNavigate();
   const handleAdminPageLogout = () => {
+    Cookies.remove("jwt");
+    Cookies.remove("role");
     navigate("/");
   };
 

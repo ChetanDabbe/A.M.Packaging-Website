@@ -9,6 +9,7 @@ import LoginPageCust from "./components/LoginPageCust";
 import SignUpPage from "./components/SignUpPage";
 import AdminPage from "./components/AdminPage";
 import CartPage from "./components/CartPage";
+import CheckOutpage from "./components/CheckOutPage";
 import "./App.css";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/product/login-page/signup" element={<SignUpPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/product/cart-page" element={<CartPage cartItems={cart} updateCart={updateCart} />} />
+          <Route path="/product/cart-page/checkout-page" element={<CheckOutpage/>}></Route>
         </Routes>
       </Router>
     </div>

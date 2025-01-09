@@ -1,4 +1,5 @@
 import React from "react";
+import {useNavigate} from "react-router-dom";
 import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
 import "../styles/cartPage.css";
 
@@ -30,6 +31,14 @@ function CartPage({ cartItems = [], updateCart }) {
   const handleRemove = (id) => {
     updateCart((prevCart) => prevCart.filter((item) => item._id !== id));
   };
+  const navigate=useNavigate();
+  const handleContinueShopping=()=>{
+    navigate("/product");
+  }
+
+  const handleProceedToCheckout=()=>{
+    navigate("/product/cart-page/checkout-page");
+  }
 
   return (
     <div className="cartPage-container">
@@ -73,8 +82,8 @@ function CartPage({ cartItems = [], updateCart }) {
         <p>Subtotal: Rs {calculateSubtotal()}</p>
         <p>Tax (13%): Rs {calculateSubtotal() * 0.13}</p>
         <p>Total: Rs {calculateSubtotal() * 1.13}</p>
-        <button>Proceed to Checkout</button>
-        <button>Continue Shopping</button>
+        <button onClick={handleProceedToCheckout}>Proceed to Checkout</button>
+        <button onClick={handleContinueShopping}>Continue Shopping</button>
       </div>
     </div>
   );

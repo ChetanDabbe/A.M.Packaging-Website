@@ -11,6 +11,7 @@ function ProductPage({ updateCart }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [quantities, setQuantities] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState(""); 
 
   const fetchProducts = async () => {
     try {
@@ -31,15 +32,21 @@ function ProductPage({ updateCart }) {
   useEffect(() => {
     fetchProducts();
     const token = Cookies.get("jwt");
+    const userRole = Cookies.get("role"); // Getting user role from cookies
     if (token) {
       setIsLoggedIn(true);
+    }
+    if (userRole) {
+      setRole(userRole); // Setting user role to either "admin" or "user"
     }
   }, []);
 
   const handleLogout = () => {
     Cookies.remove("jwt");
+    Cookies.remove("role");
     setIsLoggedIn(false);
-    navigate("/product/");
+    setRole(""); // Clearing user role on logout
+    navigate("/product");
   };
 
   const openLoginInPage = () => {
@@ -60,36 +67,15 @@ function ProductPage({ updateCart }) {
     }));
   };
 
-  // const handleAddToCart = (product) => {
-  //   if (typeof updateCart === "function") {
-  //     console.log("Update cart function is valid."); 
-  //     updateCart((prevCart) => {
-  //       const existingItem = prevCart.find((item) => item._id === product._id);
-        
-  //       if (existingItem) {
-  //         console.log("Product already in cart. Updating quantity.");
-  //         return prevCart.map((item) =>
-  //           item._id === product._id
-  //             ? { ...item, quantity: item.quantity + 1 }
-  //             : item
-  //         );
-  //       }
-        
-  //       alert("Product added to cart");
-  //       return [...prevCart, { ...product, quantity: 1 }];
-  //     });
-  //   } else {
-  //     console.error("updateCart is not a function");
-  //   }
-  // };
-  
   const handleAddToCart = (product) => {
     if (isLoggedIn) {
       if (typeof updateCart === "function") {
         console.log("Update cart function is valid.");
         updateCart((prevCart) => {
-          const existingItem = prevCart.find((item) => item._id === product._id);
-  
+          const existingItem = prevCart.find(
+            (item) => item._id === product._id
+          );
+
           if (existingItem) {
             console.log("Product already in cart. Updating quantity.");
             return prevCart.map((item) =>
@@ -98,7 +84,7 @@ function ProductPage({ updateCart }) {
                 : item
             );
           }
-  
+
           alert("Product added to cart");
           return [...prevCart, { ...product, quantity: 1 }];
         });
@@ -107,10 +93,9 @@ function ProductPage({ updateCart }) {
       }
     } else {
       alert("Please log in to add items to the cart.");
-      navigate("/product/login-page"); 
+      navigate("/product/login-page");
     }
   };
-  
 
   const filteredProducts = products.filter((product) =>
     product.productName.toUpperCase().includes(searchTerm.toUpperCase())
@@ -132,15 +117,36 @@ function ProductPage({ updateCart }) {
         </div>
         <div className="action-buttons">
           {isLoggedIn ? (
-            <button className="icon-button" onClick={handleLogout}>
-              <FaUser className="icon" /> Logout
-            </button>
+            <>
+              {role === "admin" ? (
+                <button
+                  className="icon-button"
+                  onClick={() => navigate("/admin")}
+                >
+                  <FaUser className="icon" /> Admin Panel
+                </button>
+              ) : (
+                <button className="icon-button" onClick={handleLogout}>
+                  <FaUser className="icon" /> Logout
+                </button>
+              )}
+            </>
           ) : (
             <button className="icon-button" onClick={openLoginInPage}>
               <FaUser className="icon" /> Login
             </button>
           )}
-          <button className="icon-button" onClick={() => navigate("/product/cart-page")}>
+          <button
+            className="icon-button"
+            onClick={() => {
+              if (isLoggedIn) {
+                navigate("/product/cart-page");
+              } else {
+                alert("Please log in to access the cart.");
+                navigate("/product/login-page");
+              }
+            }}
+          >
             <FaShoppingCart className="icon" /> Cart
           </button>
         </div>
