@@ -1,0 +1,121 @@
+.cartPage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background-color: #f9f9f9;
+  }
+  
+  .cartPage-cont1 {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .cartPage-cont1 h3 {
+    margin-left: 0.5rem;
+    font-size: 1.8rem;
+    color: #007bff;
+  }
+  
+  .cartPage-cont2 {
+    width: 100%;
+    max-width: 1200px;
+  }
+  
+  .cartPage-cont2-product {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .cartPage-cont2-image img {
+    width: 6rem;
+    height: 6rem;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  
+  .cartPage-cont2-product-detail {
+    flex-grow: 1;
+    padding-left: 1rem;
+  }
+  
+  .cartPage-product {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* gap:2rem; */
+    width: 100%;
+  }
+  
+  .cartPage-product p {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+  }
+  
+  .cartPage-product button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .cartPage-product span {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 0 0.5rem;
+  }
+  
+  .cartPage-product button:nth-child(2),
+  .cartPage-product button:nth-child(3) {
+    padding: 0.4rem 0.5rem;
+    margin: 0 0.3rem;
+  }
+  
+  .cartPage-order-summary {
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .cartPage-order-summary h4 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+  
+  .cartPage-order-summary p {
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+  }
+  
+  .cartPage-order-summary button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin: 1rem 0.5rem;
+  }
+  
+  .cartPage-order-summary button:nth-child(2) {
+    background-color: #6c757d;
+  }
+  
+  .cartPage-cont2-product .cartPage-cont2-product-detail .cartPage-product .FaTrashAlt {
+    cursor: pointer;
+    color: #dc3545;
+  }
+  

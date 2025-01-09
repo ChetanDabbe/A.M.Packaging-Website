@@ -1,33 +1,37 @@
-import React, {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import Home from './components/Home';
-import ProductPage from './components/ProductPage';
-import AboutPage from './components/AboutPage';
-import Contact from './components/ContactPage';
-import AddProduct from './components/AddProduct';
-import LoginPageCust from './components/LoginPageCust';
-import SignUpPage from './components/SignUpPage';
-import AdminPage from './components/AdminPage';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import ProductPage from "./components/ProductPage";
+import AboutPage from "./components/AboutPage";
+import Contact from "./components/ContactPage";
+import AddProduct from "./components/AddProduct";
+import LoginPageCust from "./components/LoginPageCust";
+import SignUpPage from "./components/SignUpPage";
+import AdminPage from "./components/AdminPage";
+import CartPage from "./components/CartPage";
+import "./App.css";
 
 function App() {
+  const [cart, setCart] = useState([]);
+
+  // updateCart function to modify cart state
+  const updateCart = (newCart) => setCart(newCart);
+
   return (
     <div className="App">
-
       <Router>
         <Routes>
-          <Route path="/" element={<Home/>}></Route>
-          <Route path="/product" element={<ProductPage/>}></Route>
-          <Route path="/about" element={<AboutPage/>}></Route>
-          <Route path="/contact" element={<Contact/>}></Route>
-          <Route path="/add" element={<AddProduct/>}> </Route>
-          <Route path="/product/login-page" element={<LoginPageCust/>}></Route>
-
-          <Route path="/product/login-page/signup" element={<SignUpPage/>}></Route>
-
-          <Route path="/admin" element={<AdminPage/>}></Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/product" element={<ProductPage updateCart={updateCart} />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/add" element={<AddProduct />} />
+          <Route path="/product/login-page" element={<LoginPageCust />} />
+          <Route path="/product/login-page/signup" element={<SignUpPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/product/cart-page" element={<CartPage cartItems={cart} updateCart={updateCart} />} />
         </Routes>
       </Router>
-      
     </div>
   );
 }

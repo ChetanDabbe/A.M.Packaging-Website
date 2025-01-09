@@ -5,7 +5,7 @@ import "../styles/ProductPage.css";
 import { FaSearch, FaUser, FaShoppingCart } from "react-icons/fa";
 import Navbar from "./Navbar";
 
-function ProductPage() {
+function ProductPage({ updateCart }) {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,7 +30,7 @@ function ProductPage() {
 
   useEffect(() => {
     fetchProducts();
-    const token = Cookies.get("jwt"); // Check if the JWT token exists in cookies
+    const token = Cookies.get("jwt");
     if (token) {
       setIsLoggedIn(true);
     }
@@ -60,6 +60,58 @@ function ProductPage() {
     }));
   };
 
+  // const handleAddToCart = (product) => {
+  //   if (typeof updateCart === "function") {
+  //     console.log("Update cart function is valid."); 
+  //     updateCart((prevCart) => {
+  //       const existingItem = prevCart.find((item) => item._id === product._id);
+        
+  //       if (existingItem) {
+  //         console.log("Product already in cart. Updating quantity.");
+  //         return prevCart.map((item) =>
+  //           item._id === product._id
+  //             ? { ...item, quantity: item.quantity + 1 }
+  //             : item
+  //         );
+  //       }
+        
+  //       alert("Product added to cart");
+  //       return [...prevCart, { ...product, quantity: 1 }];
+  //     });
+  //   } else {
+  //     console.error("updateCart is not a function");
+  //   }
+  // };
+  
+  const handleAddToCart = (product) => {
+    if (isLoggedIn) {
+      if (typeof updateCart === "function") {
+        console.log("Update cart function is valid.");
+        updateCart((prevCart) => {
+          const existingItem = prevCart.find((item) => item._id === product._id);
+  
+          if (existingItem) {
+            console.log("Product already in cart. Updating quantity.");
+            return prevCart.map((item) =>
+              item._id === product._id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            );
+          }
+  
+          alert("Product added to cart");
+          return [...prevCart, { ...product, quantity: 1 }];
+        });
+      } else {
+        console.error("updateCart is not a function");
+      }
+    } else {
+      alert("Please log in to add items to the cart.");
+      navigate("/product/login-page"); 
+    }
+  };
+  
+
   const filteredProducts = products.filter((product) =>
     product.productName.toUpperCase().includes(searchTerm.toUpperCase())
   );
@@ -88,7 +140,7 @@ function ProductPage() {
               <FaUser className="icon" /> Login
             </button>
           )}
-          <button className="icon-button">
+          <button className="icon-button" onClick={() => navigate("/product/cart-page")}>
             <FaShoppingCart className="icon" /> Cart
           </button>
         </div>
@@ -104,8 +156,6 @@ function ProductPage() {
                   alt={product.productName}
                   className="product_image"
                 />
-               {console.log("Product Image:", product.image)}
-
               </div>
               <div className="fetch_product_detail">
                 <h3 className="product_name">{product.productName}</h3>
@@ -129,11 +179,11 @@ function ProductPage() {
                     >
                       –
                     </button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;
                     <span className="quantity_value">
                       {quantities[product._id]}
                     </span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;
                     <button
                       className="quantity_button"
                       onClick={() => incrementQuantity(product._id)}
@@ -156,6 +206,7 @@ function ProductPage() {
                       color: "#0056b3",
                       border: "2px solid silver",
                     }}
+                    onClick={() => handleAddToCart(product)}
                   >
                     Add to Cart
                   </button>
