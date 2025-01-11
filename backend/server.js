@@ -19,7 +19,8 @@ const port = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "https://a-m-packaging-website.vercel.app", // Your frontend URL
+    origin: "http://localhost:3000", // Replace with your frontend URL
+    // origin:process.env.FRONTEND_URL || "http://localhost:3000" ,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
