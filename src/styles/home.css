@@ -1,51 +1,49 @@
-.frame2{
-    display:flex;
+.frame2 {
+    display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 4rem;
 }
 
-.frame2_cont{
-    display:flex;
+.frame2_cont {
+    display: flex;
     flex-direction: column;
-    width:80vw;
-    height:13rem;
+    width: 80vw;
+    height: 13rem;
     background-color: rgb(124, 120, 120);
     align-items: center;
-    color:white;
+    color: white;
 }
 
-.frame2_cont button{
-    width:auto;
-    height:2.3rem;
+.frame2_cont button {
+    width: auto;
+    height: 2.3rem;
     margin-bottom: 2.2rem;
-    padding-left:1.2rem;
-    padding-right:1.2rem;
-    padding-top:0.6rem;
-    padding-bottom:0.9rem;
-    border-radius:7px;
-    background-color:rgb(111, 10, 206);
-    color:white;
-    border:none;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    padding-top: 0.6rem;
+    padding-bottom: 0.9rem;
+    border-radius: 7px;
+    background-color: rgb(111, 10, 206);
+    color: white;
+    border: none;
 }
 
-.frame3{
-    display:flex;
+.frame3 {
+    display: flex;
     flex-direction: column;
     align-items: center;
-
 }
-
 
 .products_bottle {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem; 
+    gap: 1.5rem;
     justify-content: center;
 }
 
 .product {
-    flex-basis: calc(33.33% - 1.5rem); 
+    flex-basis: calc(33.33% - 1.5rem);
     height: 14rem;
     display: flex;
     flex-direction: column;
@@ -73,16 +71,15 @@
     flex-grow: 1;
 }
 
-
 .frame3 h1 {
     font-size: 2.5rem;
     font-weight: bold;
     text-align: center;
     color: #A259FF;
-    font-weight: bold;
     margin-bottom: 1rem;
     letter-spacing: 1px;
 }
+
 .frame3 p {
     font-size: 1.1rem;
     color: #555;
@@ -92,10 +89,10 @@
 
 .btn_order {
     display: flex;
-    justify-content: center; 
-    align-items: center; 
-    margin-top:-2rem;
-    margin-bottom:1.2rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: -2rem;
+    margin-bottom: 1.2rem;
 }
 
 .order_btn {
@@ -125,23 +122,14 @@
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
-@media (max-width: 480px) {
-    .order_btn {
-        width: 100%;
-        font-size: 14px;
-        padding: 10px 20px;
-    }
-}
-
-
 .view_btn {
     padding: 0.8rem 2rem;
     font-size: 1.2rem;
     font-weight: bold;
-    background-color: #3498db; 
+    background-color: #3498db;
     color: white;
     border: none;
-    border-radius: 30px; 
+    border-radius: 30px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
     margin: 1rem auto;
@@ -149,10 +137,89 @@
 }
 
 .view_btn:hover {
-    background-color: #2980b9;  
-    transform: scale(1.05); 
+    background-color: #2980b9;
+    transform: scale(1.05);
 }
 
 .view_btn:focus {
     outline: none;
+}
+
+@media (max-width: 768px) {
+    .frame2_cont {
+        width: 90vw;
+        height: auto;
+    }
+
+    .frame3 h1 {
+        font-size: 2rem;
+    }
+
+    .frame3 p {
+        font-size: 1rem;
+    }
+
+    .product {
+        flex-basis: calc(50% - 1.5rem);
+        height: auto;
+    }
+
+    .order_btn {
+        width: 100%;
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .view_btn {
+        font-size: 1.1rem;
+        padding: 0.6rem 1.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .frame2_cont {
+        width: 95vw;
+        height: auto;
+    }
+
+    .frame3 h1 {
+        font-size: 1.8rem;
+    }
+
+    .frame3 p {
+        font-size: 0.9rem;
+    }
+
+    .products_bottle {
+        flex-direction: column;
+        align-items: center; 
+    }
+
+    .product {
+        flex-basis: 100%; 
+        height: auto;
+    }
+
+    .order_btn {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    .view_btn {
+        font-size: 1rem;
+        padding: 0.5rem 1.2rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .product {
+        flex-basis: calc(33.33% - 1.5rem);
+        height: 16rem;
+    }
+
+    .order_btn {
+        padding: 12px 24px;
+        font-size: 15px;
+    }
 }

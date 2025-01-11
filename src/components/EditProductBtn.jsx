@@ -7,7 +7,7 @@ function EditProductBtn({ product, updateProductList, setShowEditProduct }) {
   const [price, setPrice] = useState(product.price);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(
-    `http://localhost:5000/${product.image}`
+    `${process.env.REACT_APP_BACKEND_URI}/${product.image}`
   );
   const [features, setFeatures] = useState(product.features || "");
 
@@ -31,7 +31,8 @@ function EditProductBtn({ product, updateProductList, setShowEditProduct }) {
     }
   
     try {
-      const response = await fetch(`http://localhost:5000/update/${product._id}`, {
+      
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/update/${product._id}`, {
         method: "PUT",
         credentials: "include",
         body: formData,

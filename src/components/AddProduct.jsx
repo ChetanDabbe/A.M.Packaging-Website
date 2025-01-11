@@ -60,7 +60,7 @@ function AddProduct() {
       const token = localStorage.getItem("jwtToken") || document.cookie.replace(/(?:(?:^|.*;\s*)jwt\s*=\s*([^;]*).*$)|^.*$/, "$1");
 
       // Send the token in Authorization header if available
-      const response = await axios.post("http://localhost:5000/add", data, {
+      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URI}/add`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`, // Include the token in the Authorization header

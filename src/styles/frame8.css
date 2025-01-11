@@ -1,39 +1,81 @@
-.frame8_container{
-    display:flex;
+.frame8_container {
+    display: flex;
     flex-direction: row;
-    gap:7rem;
-    width:100vw;
+    gap: 7rem;
+    width: 100vw;
     background-color: #2f1865;
     justify-content: center;
-}
-.container1{
-    width:20rem;
-    color:white;
+    padding: 2rem;
 }
 
-.container1 p{
+.container1 {
+    width: 20rem;
+    color: white;
+    padding-left: 2rem;
+}
+
+.container1 p {
     text-align: left;
-    color:white;
+    color: white;
 }
 
 .container2 {
-    display:flex;
+    display: flex;
     flex-direction: column;
-    color:white;
-}
-.container3{
-    color:white;
-}
-.container3 a{
-    text-decoration: none;
-    color:white;
-    margin-right:0.4rem;
-}
-.container2 a{
-    text-decoration: none;
-    color:white;
+    color: white;
 }
 
-.container2 a:hover, .container3 a:hover{
-    color:yellow;
+.container3 {
+    color: white;
+}
+
+.container3 a {
+    text-decoration: none;
+    color: white;
+    margin-right: 0.4rem;
+}
+
+.container2 a {
+    text-decoration: none;
+    color: white;
+}
+
+.container2 a:hover, .container3 a:hover {
+    color: yellow;
+}
+
+@media (max-width: 768px) {
+    .frame8_container {
+        flex-direction: column;
+        gap: 3rem;
+        padding: 1rem;
+    }
+
+    .container1, .container2, .container3 {
+        width: 90%;
+        text-align: center;
+    }
+
+    .container1 {
+        padding-left: 5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .frame8_container {
+        padding: 1rem;
+    }
+
+    .container1, .container2, .container3 {
+        width: 100%;
+    }
+
+    .container1 {
+        padding-left: 5rem;
+        /* text-align: center; */
+    }
+
+    .container1 p, .container2 a, .container3 a {
+        font-size: 0.9rem;
+    }
 }

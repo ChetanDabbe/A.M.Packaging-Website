@@ -83,7 +83,7 @@ function AdminSetting() {
     try {
       const token = Cookies.get("token");  
   
-      const response = await fetch("http://localhost:5000/updateAdminpassword", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/updateAdminpassword`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -11,7 +11,7 @@ function AdminUser() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://localhost:5000/user");
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/user`);
         const data = await response.json();
         setUsers(data);
         setFilteredUsers(data); 

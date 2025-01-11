@@ -183,7 +183,8 @@ function AdminProductPage() {
 
   const fetchProductAdmin = async () => {
     try {
-      const response = await fetch("http://localhost:5000/products");
+      
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/products`);
       const data = await response.json();
       setProductsAdmin(data);
     } catch (error) {
@@ -204,7 +205,7 @@ function AdminProductPage() {
     const confirmDelete = window.confirm("Are you sure you want to delete the selected product?");
     if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost:5000/delete/${productId}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/delete/${productId}`, {
           method: "DELETE",
           credentials: "include",  
           headers: {
@@ -301,7 +302,7 @@ function AdminProductPage() {
                     <td>
                       <div className="admin_product_image_container">
                         <img
-                          src={`http://localhost:5000/${product.image}`}
+                          src={`${process.env.REACT_APP_BACKEND_URI}/${product.image}`}
                           alt={product.productName}
                           className="admin_product_image"
                         />

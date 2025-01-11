@@ -19,7 +19,7 @@ function Home() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch('http://localhost:5000/products'); 
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/products`); 
                 if (!response.ok) {
                     throw new Error('Failed to fetch products');
                 }
@@ -74,7 +74,7 @@ function Home() {
                         displayedProducts.map((product) => (
                             <div key={product._id} className="product">
                                 <div className="photo">
-                                    <img src={`http://localhost:5000/${product.image}`|| 'default.jpg'} alt={product.productName} />
+                                    <img src={`${process.env.REACT_APP_BACKEND_URI}/${product.image}`|| 'default.jpg'} alt={product.productName} />
                                 </div>
                                 <div className="product_content">
                                     <p>{product.productName}</p>

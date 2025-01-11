@@ -15,7 +15,7 @@ function ProductPage({ updateCart }) {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("http://localhost:5000/products");
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/products`);
       const data = await response.json();
       setProducts(data);
 
@@ -158,7 +158,7 @@ function ProductPage({ updateCart }) {
             <div key={product._id} className="product_card">
               <div className="fetch_image">
                 <img
-                  src={`http://localhost:5000/${product.image}`}
+                  src={`${process.env.REACT_APP_BACKEND_URI}/${product.image}`}
                   alt={product.productName}
                   className="product_image"
                 />

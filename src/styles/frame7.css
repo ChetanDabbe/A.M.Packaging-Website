@@ -1,33 +1,32 @@
-.frame7_container{
-    margin-top:4rem;
-    width:100vw;
+.frame7_container {
+    margin-top: 4rem;
+    width: 100vw;
     background-color: #5d3bac;
-    color:white;
-    /* padding-left:10rem;; */
+    color: white;
 }
 
-.frame7_title{
+.frame7_title {
     text-align: center;
 }
 
-.contact_cont{
-    display:flex;
+.contact_cont {
+    display: flex;
     flex-direction: column;
 }
 
-.cont1 p,.cont2 p{
-    line-height:0.004;
-    color:white;
+.cont1 p, .cont2 p {
+    line-height: 1.5;
+    color: white;
     text-align: left;
 }
 
 .divide_cont {
     display: flex;
     flex-direction: row;
-    justify-content: center; 
-    align-items: center; 
-    width: 100%; 
-    gap:8rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 8rem;
 }
 
 .mail_send {
@@ -106,3 +105,45 @@
     box-shadow: 0 0 5px rgba(112, 66, 222, 0.5);
 }
 
+@media (max-width: 768px) {
+    .frame7_container {
+        padding: 0 2rem;
+    }
+
+    .divide_cont {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .mail_send {
+        max-width: 80vw;
+        padding: 1.5rem 2rem;
+    }
+
+    .mail_send input, .mail_send button {
+        max-width: 80vw;
+    }
+
+    .mail_send h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .frame7_container {
+        padding: 0 1rem;
+    }
+
+    .mail_send {
+        padding: 1rem 1.5rem;
+    }
+
+    .mail_send input, .mail_send button {
+        max-width: 90vw;
+    }
+
+    .mail_send h2 {
+        font-size: 1.2rem;
+    }
+}

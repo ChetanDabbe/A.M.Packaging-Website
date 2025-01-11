@@ -53,7 +53,7 @@ function CartPage({ cartItems = [], updateCart }) {
             <div key={item._id} className="cartPage-cont2-product">
               <div className="cartPage-cont2-image">
                 <img
-                  src={`http://localhost:5000/${item.image}`}
+                  src={`${process.env.REACT_APP_BACKEND_URI}/${item.image}`}
                   alt={item.productName}
                 />
               </div>
