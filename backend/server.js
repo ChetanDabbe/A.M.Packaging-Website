@@ -17,14 +17,25 @@ dotenv.config();
 
 const port = process.env.PORT || 5000;
 
+
+const cors = require("cors");
+
 app.use(
   cors({
-    // origin: "http://localhost:3000", // Replace with your frontend URL
-    origin:process.env.REACT_APP_FRONTEND_URI,
+    origin: process.env.FRONTEND_URI || "http://localhost:3000", // Default to localhost for development
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
+
+// app.use(
+//   cors({
+//     // origin: "http://localhost:3000", // Replace with your frontend URL
+//     origin:process.env.REACT_APP_FRONTEND_URI,
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     credentials: true,
+//   })
+// );
 
 mongoose
   .connect(process.env.MONGODB_URI, {
