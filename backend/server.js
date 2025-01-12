@@ -18,8 +18,6 @@ dotenv.config();
 const port = process.env.PORT || 5000;
 
 
-const cors = require("cors");
-
 app.use(
   cors({
     origin: process.env.FRONTEND_URI || "http://localhost:3000", // Default to localhost for development
