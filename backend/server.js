@@ -28,20 +28,12 @@ app.use(
 );
 
 
-app.use((req, res, next) => {
-  console.log("Request origin:", req.headers.origin);
-  console.log("Frontend URI from .env:", process.env.FRONTEND_URI);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log("Request origin:", req.headers.origin);
+//   console.log("Frontend URI from .env:", process.env.FRONTEND_URI);
+//   next();
+// });
 
-// app.use(
-//   cors({
-//     // origin: "http://localhost:3000", // Replace with your frontend URL
-//     origin:process.env.REACT_APP_FRONTEND_URI,
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//     credentials: true,
-//   })
-// );
 
 mongoose
   .connect(process.env.MONGODB_URI, {
