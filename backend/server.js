@@ -26,7 +26,7 @@ app.use(
     credentials: true,
   })
 );
-
+console.log(process.env.FRONTEND_URI);
 // app.use(
 //   cors({
 //     // origin: "http://localhost:3000", // Replace with your frontend URL
