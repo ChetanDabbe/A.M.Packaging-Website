@@ -28,6 +28,11 @@ app.use(
 );
 
 
+app.use((req, res, next) => {
+  console.log("Request origin:", req.headers.origin);
+  console.log("Frontend URI from .env:", process.env.FRONTEND_URI);
+  next();
+});
 
 // app.use(
 //   cors({
