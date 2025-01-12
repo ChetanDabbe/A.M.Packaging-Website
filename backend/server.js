@@ -26,7 +26,13 @@ app.use(
     credentials: true,
   })
 );
-console.log(process.env.FRONTEND_URI);
+
+app.use((req, res, next) => {
+  console.log("Request origin:", req.headers.origin);
+  console.log("Frontend URI from .env:", process.env.FRONTEND_URI);
+  next();
+});
+
 // app.use(
 //   cors({
 //     // origin: "http://localhost:3000", // Replace with your frontend URL
