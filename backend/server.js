@@ -95,7 +95,7 @@ const AdminSchema = new mongoose.Schema({
 });
 
 const Admin = mongoose.model("Admin", AdminSchema);
-
+/*
 app.post("/register", async (req, res) => {
   const { firstName, lastName, companyName, email, mobile, password } =
     req.body;
@@ -127,39 +127,39 @@ app.post("/register", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Failed to create account" });
   }
+});*/
+
+app.post("/register", async (req, res) => {
+  const { firstName, lastName, email, mobile, password, companyName } = req.body;
+
+  if (!firstName || !lastName || !email || !mobile || !password ) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  try {
+    const existingAdmin = await Admin.findOne({ email });
+    if (existingAdmin) {
+      return res.status(400).json({ error: "Email already exists" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newAdmin = new Admin({
+      firstName,
+      lastName,
+      email,
+      mobile,
+      password: hashedPassword,
+      companyName: companyName || "",
+      role: "admin",
+    });
+
+    await newAdmin.save();
+    res.status(201).json({ message: "Admin account created successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create admin account" });
+  }
 });
-
-// app.post("/register", async (req, res) => {
-//   const { firstName, lastName, email, mobile, password, companyName } = req.body;
-
-//   if (!firstName || !lastName || !email || !mobile || !password ) {
-//     return res.status(400).json({ error: "All fields are required" });
-//   }
-
-//   try {
-//     const existingAdmin = await Admin.findOne({ email });
-//     if (existingAdmin) {
-//       return res.status(400).json({ error: "Email already exists" });
-//     }
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     const newAdmin = new Admin({
-//       firstName,
-//       lastName,
-//       email,
-//       mobile,
-//       password: hashedPassword,
-//       companyName: companyName || "",
-//       role: "admin",
-//     });
-
-//     await newAdmin.save();
-//     res.status(201).json({ message: "Admin account created successfully" });
-//   } catch (error) {
-//     res.status(500).json({ error: "Failed to create admin account" });
-//   }
-// });
 
 app.post("/login", async (req, res) => {
   const { email, password, role } = req.body;
