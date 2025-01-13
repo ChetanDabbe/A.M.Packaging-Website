@@ -19,9 +19,17 @@ const port = process.env.PORT || 5000;
 
 
 
+// app.use(
+//   cors({
+//     origin: process.env.FRONTEND_URI || "http://localhost:3000", // Default to localhost for development
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URI || "http://localhost:3000", // Default to localhost for development
+    origin: "http://localhost:3000", // Default to localhost for development
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
