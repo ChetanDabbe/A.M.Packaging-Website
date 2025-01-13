@@ -56,19 +56,29 @@ function AddProduct() {
         data.append("productImage", formData.productImage);
       }
 
-      // Retrieve token from localStorage or cookies
+      
       const token = localStorage.getItem("jwtToken") || document.cookie.replace(/(?:(?:^|.*;\s*)jwt\s*=\s*([^;]*).*$)|^.*$/, "$1");
 
-      // Send the token in Authorization header if available
+      
       const response = await axios.post(`${process.env.REACT_APP_BACKEND_URI}/add`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+          Authorization: `Bearer ${token}`, 
         },
-        withCredentials: true,  // Ensure cookies are sent
+        withCredentials: true, 
       });
+      console.log(response.data); 
 
-      alert(response.data.message);
+
+      alert("Product added successfully!");
+      setFormData({
+        productName: "",
+        price: "",
+        capacity: "",
+        productImage: null,
+      });
+      setFeatures([""]); 
+      window.location.reload();
     } catch (error) {
       alert(
         "Error uploading product: " +

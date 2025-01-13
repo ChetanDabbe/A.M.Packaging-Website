@@ -26,10 +26,13 @@ app.use(
   })
 );
 
+
+
+
 // app.use(
 //   cors({
-//     // origin: "http://localhost:3000", // Replace with your frontend URL
-//     origin:process.env.REACT_APP_FRONTEND_URI,
+//     origin: "http://localhost:3000", // Replace with your frontend URL
+//     // origin:process.env.REACT_APP_FRONTEND_URI,
 //     methods: ["GET", "POST", "PUT", "DELETE"],
 //     credentials: true,
 //   })
@@ -240,6 +243,37 @@ app.post("/login", async (req, res) => {
 //     });
 //   }
 // };
+// const authenticateAdmin = async (req, res, next) => {
+//   const token = req.cookies.jwt;
+//   if (!token) {
+//     return res.status(401).json({ error: "Unauthorized, please login" });
+//   }
+
+//   try {
+//     const decoded = jwt.verify(
+//       token,
+//       process.env.JWT_SECRET || "default_secret"
+//     );
+//     const admin = await Admin.findById(decoded.userId);
+
+//     if (!admin || admin.role !== "admin") {
+//       return res.status(403).json({ error: "Only admin can add products" });
+//     }
+
+//     req.user = admin;
+//     console.log("Authenticated admin:", admin); 
+
+//     next();
+//   } catch (err) {
+//     return res.status(401).json({
+//       error:
+//         err.name === "TokenExpiredError"
+//           ? "Token has expired, please login again"
+//           : "Unauthorized",
+//     });
+//   }
+// };
+
 const authenticateAdmin = async (req, res, next) => {
   const token = req.cookies.jwt;
   if (!token) {
@@ -247,20 +281,24 @@ const authenticateAdmin = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "default_secret"
-    );
-    const admin = await Admin.findById(decoded.userId);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || "default_secret");
 
+    // Check for user
+    const user = await User.findById(decoded.userId);
+    if (user && user.role === "admin") {
+      req.user = user; // Attach user data to the request
+      return next();
+    }
+
+    // Check for admin if no user with admin role found
+    const admin = await Admin.findById(decoded.userId);
     if (!admin || admin.role !== "admin") {
       return res.status(403).json({ error: "Only admin can add products" });
     }
 
-    req.user = admin;
-    console.log("Authenticated admin:", admin); 
-
+    req.user = admin; // Attach admin data to the request
     next();
+    
   } catch (err) {
     return res.status(401).json({
       error:
